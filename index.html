@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Plss..</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+    <style>
+      body {
+        margin: 0;
+        font-family: "Poppins", sans-serif;
+        background: #ffeae6;
+        /* overflow: hidden;  */
+      }
+
+      /* SECTION 1: LOADING */
+      #loading {
+        position: fixed;
+        inset: 0;
+        background: #b5828c;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        font-size: 22px;
+        z-index: 3000;
+      }
+      .dots::after {
+        content: "";
+        animation: dots 1.5s infinite;
+      }
+      @keyframes dots {
+        0% {
+          content: "";
+        }
+        25% {
+          content: ".";
+        }
+        50% {
+          content: "..";
+        }
+        75% {
+          content: "...";
+        }
+        100% {
+          content: "";
+        }
+      }
+
+      /* Tombol musik */
+      #musicBtn {
+        position: fixed;
+        top: 15px;
+        left: 15px; /* tombol di kiri */
+        background: #e5989b;
+        border: none;
+        border-radius: 50%;
+        padding: 10px;
+        font-size: 18px;
+        color: white;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        z-index: 5000;
+      }
+
+      /* SECTION 2: POPUP MODAL */
+      #introModal {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 2500;
+      }
+      .modal-box {
+        background: #fff;
+        color: #333;
+        width: 80%;
+        max-width: 350px;
+        padding: 20px;
+        border-radius: 16px;
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        transform: scale(0.7);
+        opacity: 0;
+      }
+      .modal-box.show {
+        animation: pop 0.35s ease forwards;
+      }
+      .modal-box h2 {
+        margin: 0 0 10px;
+        color: #e5989b;
+      }
+      .modal-box p {
+        font-size: 15px;
+        line-height: 1.4;
+      }
+      .modal-box button {
+        margin-top: 15px;
+        padding: 10px 20px;
+        border: none;
+        background: #e5989b;
+        color: #fff;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 15px;
+      }
+
+      /* POP ANIMATION */
+      @keyframes pop {
+        0% {
+          transform: scale(0.6);
+          opacity: 0;
+        }
+        60% {
+          transform: scale(1.1);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      /* SECTION 3: CHAT */
+      #chat {
+        display: none;
+        height: 100vh;
+        overflow-y: auto;
+        padding: 20px;
+        background: #ffeae6;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .bubble {
+        max-width: 85%;
+        padding: 16px 18px;
+        border-radius: 20px;
+        margin: 12px 0;
+        line-height: 1.5;
+        display: none;
+        font-size: 16px;
+        opacity: 0;
+        transform: scale(0.8);
+      }
+      .bubble.show {
+        display: block;
+        opacity: 1;
+        transform: scale(1);
+        animation: pop 0.25s ease;
+      }
+
+      .bubble.me {
+        background: #e5989b;
+        color: #fff;
+        align-self: flex-end;
+        margin-left: auto;
+      }
+
+      /* TAP HINT */
+      #tapHint {
+        position: fixed;
+        bottom: 15px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 14px;
+        color: #b5828c;
+        background: rgba(255, 255, 255, 0.8);
+        padding: 6px 12px;
+        border-radius: 20px;
+        display: none;
+        animation: pulse 1.5s infinite;
+      }
+      @keyframes pulse {
+        0% {
+          opacity: 0.5;
+        }
+        50% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0.5;
+        }
+      }
+
+      .memories-title {
+        width: 100%;
+        text-align: center;
+        font-size: 28px;
+        font-weight: 600;
+        margin-bottom: 25px;
+        color: #b5828c;
+        font-family: "Poppins", sans-serif;
+      }
+
+      body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: #ffeae6;
+  /* hapus overflow: hidden; biar scroll bisa jalan */
+}
+
+/* SECTION 4: MEMORIES */
+#memories {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 30px 15px;
+  background: #ffeae5;
+  min-height: 100vh;
+  max-height: 100vh; /* batasi tinggi agar scroll aktif */
+  overflow-y: auto;  /* aktifkan scroll */
+}
+
+
+      /* Polaroid frame */
+      .polaroid-frame {
+        background: #fff;
+        padding: 15px;
+        border-radius: 12px;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        text-align: center;
+        width: 220px; /* lebih besar karena layout single */
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+      }
+
+      .polaroid-frame img {
+        width: 100%;
+        border-radius: 10px;
+        margin-bottom: 8px;
+      }
+
+      .polaroid-frame span {
+        font-size: 14px;
+        font-family: "Poppins", sans-serif;
+        color: #444;
+      }
+
+      /* Hover animasi interaktif */
+      .polaroid-frame:hover {
+        transform: scale(1.07) rotate(-2deg);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+      }
+
+      @keyframes scrapbookPop {
+        0% {
+          transform: scale(0) rotate(-20deg);
+          opacity: 0;
+        }
+        60% {
+          transform: scale(1.1) rotate(5deg);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(1) rotate(0deg);
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- SECTION 1: LOADING -->
+    <div id="loading">eumm<span class="dots"></span></div>
+
+    <!-- BACKSOUND -->
+    <audio id="backsound" loop>
+      <source src="backsound.mp3" type="audio/mp3" />
+      Browser kamu tidak mendukung audio.
+    </audio>
+
+    <!-- Tombol Musik -->
+    <button id="musicBtn">🔇</button>
+
+    <!-- SECTION 2: INTRO MODAL -->
+    <div id="introModal">
+      <div class="modal-box">
+        <h2>eum...</h2>
+        <p>
+          sayang.. sebelumnya aku mau minta maaf uda buat kamu marah ya,, aku tadi juga kepancing emosi gatau kenapa, dan aku mau ngalah, kamu berhak untuk apapun buat hidup kamu dan aku ga punya hak buat ngatur itu, aku mau minta maaf,
+          tulus ga boong, tapi aku bingung mau minta maaf kaya gimana, mungkin disini aku bisa leluasa buat minta maaf, aku harap kamu bisa maafin aku ya..
+        </p>
+        <button id="startBtn">tap ini ya sayang..</button>
+      </div>
+    </div>
+
+    <!-- SECTION 3: CHAT -->
+    <div id="chat">
+      <div class="bubble me">haii nye, hai sayang.. sebelumnya aku bener bener minta maaf untuk sekali lagi..🙏❤️,</div>
+      <div class="bubble me">maaf karna aku egois 😔 dan baperan 🥺, bener kaya yang kamu bilang, dan mungkin permintaan maaf aku kali ini gabisa langsung buat hati kamu luluh 💔 n langsung maafin aku gitu aja.</div>
+      <div class="bubble me">aku tau maaf aja ga cukup 😞, tapi untuk saat ini aku cuma bisa kaya gini cara minta maafnya,, maaf ya sayang sekali lagi..💕</div>
+      <div class="bubble me">
+        eum.. jujur aku sadar kalo aku ini suka nyalahin kamu 🙇‍♂️, tapi bukan dengan maksud yang kamu fikirin, sering buat kamu ngerasa disudutin 😢, n aku terlalu nurutin ego aku sendiri 😤. aku mau ngalah sekarang sayang 🤍, bukan mau tapi
+        harus karna aku juga salah, aku minta maaf banget ya sayangg 🥺.. kenapa dari awal aku harus keras hati 😔. kamu itu orang yang selalu ada buat aku 🤗, tapi aku malah sering buat kamu sakit hati 💔. aku bener-bener minta maaf ya
+        sayang..🙏❤️
+      </div>
+      <div class="bubble me">
+        aku kepikiran terus soal ini 🤯, dari kemarin, dan ini ngeganggu banget waktu aku buat ngapa ngapain dan terutama buat belajar 📚. aku kebawa emosi 😡, aku ngomong kasar ke kamu 😢. aku tau itu bikin kamu sakit hati banget 💔,
+        walaupun niat aku sebenernya bukan buat ngatain kamu 🙏. itu murni salah aku karena nggak bisa kontrol emosi aku sendiri 😞. aku bisa bilang seribu kali kalau aku nggak bermaksud ngatain kamu 🤐, tapi yang lebih penting aku ngerti
+        perasaan kamu 🫂, karena yang kamu rasain tetap sakit 😔. n aku nggak mau ngelupain itu 📝, aku mau tanggung jawab sama salah aku kali ini n seterusnya, insyaallah 🤲.
+      </div>
+      <div class="bubble me">
+        bukan janji manis kali ini 🍯, aku harap kamu bisa support n bimbing aku seterusnya 🤝 sayang 💖. aku tau kata-kata itu nggak cukup kalau nggak ada bukti 🧐. aku bakal belajar pelan-pelan 🐢 buat jadi pasangan yang lebih baik 🌹,
+        buat bisa lebih sabar 🧘, bisa lebih ngalah 🙏, dan nggak selalu nurutin ego aku 😤, tolong jangan ngerasa takut buat ngomong 🗣️ atau bantah aku kalo aku salah ⚖️, dan jangan takut aku marah 😔 atau gimana, kamu harus bisa tegas
+        sama aku 💪. aku mau dengerin kamu lebih banyak 👂, aku mau ngerti kamu lebih dalam 🫶, dan aku mau buat kamu ngerasa dihargai 💝, bukan disalahin terus. aku tau aku nggak sempurna 🌑, tapi aku bener-bener mau berubah demi hubungan
+        ini..💞
+      </div>
+      <div class="bubble me">
+        kali ini aku beneran keluar air maata 😭 sayang, aku tau aku salah banget udah berkata kaya gitu ke kamu 😔. kamu itu orang paling penting buat aku 🌎❤️. aku beneran takut kehilangan kamu 😢 padahal aku sendiri yang suka bilang
+        break lah putus lah 💔, sayang. aku ngga kebayang kalau hubungan ini harus hancur 🥀 cuma gara gara kesalahan aku yang sebenernya bisa aku perbaiki 🛠️. aku ngga mau kamu ngerasa sendirian di hubungan ini 🫂, aku pengen kamu selalu
+        ngerasa disayang 💖, dihargai 🌹, dan ditempatin di posisi yang paling spesial 👑., semoga ini bukan cuma jadi omongan belaka aku..🙏
+      </div>
+      <div class="bubble me">
+        aku sayang banget sama kamu 💕, lebih dari yang bisa aku ungkapin pake kata-kata 🌌. akuu, cuma minta kamu kasih aku kesempatan buat benerin semuanya 🫶. aku ngga janji aku langsung sempurna ⭐, tapi aku janji aku bakal usaha sekuat
+        aku 💪 buat nggak ngulangin hal yang sama 🔄. aku mau kita sama-sama belajar 📖, sama-sama tumbuh 🌱, dan sama-sama jaga hubungan ini 🤝❤️.
+      </div>
+      <div class="bubble me">
+        makasii banyak kamu udah sabar sama aku sampe sekarang 🥹, walau aku sering buat salah 🙇‍♂️. aku bersyukur banget punya kamu 🙏💕, dan aku ngga mau nyia nyiain hubungan ini apalagi kamu 💖. aku minta maaf banget ya sayang 😔, aku
+        sayang banget sama kamu..❤️
+      </div>
+      <br />
+    </div>
+
+    <!-- Section 4: Kenangan -->
+    <div id="memories">
+      <h2 class="memories-title">Our Memories 📸</h2>
+
+      <div class="polaroid-frame">
+        <img src="1.png" alt="Kenangan 1" />
+        <span>Us 💕</span>
+      </div>
+      <div class="polaroid-frame">
+        <img src="2.jpg" alt="Kenangan 2" />
+        <span>Funny yea 😆</span>
+      </div>
+      <div class="polaroid-frame">
+        <img src="3.jpg" alt="Kenangan 3" />
+        <span>Mamammm 🌸</span>
+      </div>
+      <div class="polaroid-frame">
+        <img src="4.jpg" alt="Kenangan 4" />
+        <span>My favorite person ❤️</span>
+      </div>
+    </div>
+
+    <div id="tapHint">Tap layar untuk lanjut ➜</div>
+
+    <script>
+      const loading = document.getElementById("loading");
+      const introModal = document.getElementById("introModal");
+      const modalBox = introModal.querySelector(".modal-box");
+      const startBtn = document.getElementById("startBtn");
+      const chat = document.getElementById("chat");
+      const bubbles = document.querySelectorAll(".bubble");
+      const tapHint = document.getElementById("tapHint");
+      const backsound = document.getElementById("backsound");
+      const musicBtn = document.getElementById("musicBtn");
+      let currentBubble = 0;
+      let isPlaying = false;
+
+      // Loading selesai
+      setTimeout(() => {
+        loading.style.display = "none";
+        introModal.style.display = "flex";
+        modalBox.classList.add("show");
+      }, 3000);
+
+      // Klik mulai
+      startBtn.addEventListener("click", () => {
+        introModal.style.display = "none";
+        chat.style.display = "flex";
+        tapHint.style.display = "block";
+
+        // coba play musik
+        backsound
+          .play()
+          .then(() => {
+            isPlaying = true;
+            musicBtn.textContent = "🔊";
+          })
+          .catch((err) => {
+            console.log("Autoplay dicegah:", err);
+            musicBtn.textContent = "🔇";
+          });
+      });
+
+      // Toggle musik manual
+      musicBtn.addEventListener("click", () => {
+        if (isPlaying) {
+          backsound.pause();
+          musicBtn.textContent = "🔇";
+        } else {
+          backsound
+            .play()
+            .then(() => {
+              musicBtn.textContent = "🔊";
+            })
+            .catch((err) => console.log(err));
+        }
+        isPlaying = !isPlaying;
+      });
+
+      // Tap untuk bubble chat
+      document.body.addEventListener("click", () => {
+        if (chat.style.display !== "flex") return;
+
+        if (currentBubble < bubbles.length) {
+          bubbles[currentBubble].classList.add("show");
+          currentBubble++;
+          chat.scrollTop = chat.scrollHeight;
+
+          if (currentBubble === bubbles.length) {
+            tapHint.style.display = "none";
+            setTimeout(showMemories, 2000);
+          }
+        }
+      });
+
+      // Memories muncul
+      function showMemories() {
+        chat.style.display = "none";
+        const memories = document.getElementById("memories");
+        memories.style.display = "flex";
+
+        const frames = document.querySelectorAll(".polaroid-frame");
+        frames.forEach((frame, index) => {
+          setTimeout(() => {
+            frame.style.opacity = "1";
+            frame.style.animation = "scrapbookPop 0.7s forwards";
+            frame.style.animationDelay = `${index * 0.5}s`;
+          }, index * 600);
+        });
+      }
+    </script>
+  </body>
+</html>
